@@ -1,9 +1,0 @@
-name,path,size,date,type
-root,/,0,00.00.0000 00:00,d
-temp,/temp,0,00.00.0000 00:00,d
-bin,/bin,0,00.00.0000 00:00,d
-home,/home,0,00.00.0000 00:00,d
-test.txt,/home/test.txt,100,00.00.0000 00:00,rf
-<aaaaaaaaaaaaaaaaaaaaaaaa aaaaaaa qweqwe aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa adsadqwewe                                    >
-test1.txt,/bin/test1.txt,20,00.00.0000 00:00,rf
-<qweoıqwoewqueqwıoeuqwıoueqwoıuewıoqueqwıoueqwoıeuqwıoeu>

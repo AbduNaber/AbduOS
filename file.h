@@ -19,7 +19,7 @@ namespace OS{
 
         public:
             File(){};
-            File(std::string name, std::string path, size_t size, std::string date, char * data, std::string type): name(name), path(path), size(size), date(date), type(type){};
+            File(std::string name, std::string path, size_t size, std::string date, std::string type);
             ~File(){};
 
             std::string getName();
@@ -31,8 +31,8 @@ namespace OS{
            
             virtual void rm() = 0;
             virtual void cat() = 0;
-            virtual void getData() = 0;
-            virtual void setData(char * data) = 0;
+            
+            virtual void setData(std::string data) = 0;
         
             void setName(std::string name);
             void setPath(std::string path);
@@ -49,65 +49,65 @@ namespace OS{
         private:
             // files and directories inside this directory
             std::vector<File *> files; 
-            std::map<std::string, Directory *> directories;
+            
 
         public:
             Directory(){};
-            Directory(std::string name, std::string path, size_t size, std::string date, char * data, std::string type): File(name,path,size,date,data,type){};
+            Directory(std::string name, std::string path, size_t size, std::string date, std::string type);
             ~Directory(){};
 
-           void setData(char * data){
+           void setData(std::string data){
                 throw std::invalid_argument("This is a directory!");
            };
-           void getData(){
-                throw std::invalid_argument("This is a directory!");
-           };
+           
            void rm(){
                 throw std::invalid_argument("This is a directory!");
            };
            void cat(){
                 throw std::invalid_argument("This is a directory!");
            };
+           void addFile(File * file){
+               files.push_back(file);
+           };
 
     };
 
     class RegularFile : public File{
         private:
-            char * data;
+            std::string data;
 
         public:
-            RegularFile();
-            RegularFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type);
-            ~RegularFile();
+            RegularFile(){};
+            RegularFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string data);
+            ~RegularFile(){};
 
-            void setData(char * data);
-            void getData();
+            void setData(std::string data);
+            std::string getData();
             void rm();
             void cat();
 
     };
+
     class linkedFile : public File{
         private:
             File * _mainFile;             
         public:
-            linkedFile();
+            linkedFile(){};
             linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, File * mainFile);
-            ~linkedFile();
+            ~linkedFile(){};
 
             void setMainFile(File * mainFile){
                 _mainFile = mainFile;
             };
 
 
-            void setData(char * data){
+            void setData(std::string data){
                 _mainFile->setData(data);
 
             };
-            void getData(){
-                _mainFile->getData();
-            };
+            
             void rm(){
-                
+                _mainFile->rm();
             };
 
             void cat(){
@@ -118,6 +118,7 @@ namespace OS{
 
             
     };
+
 
 
 

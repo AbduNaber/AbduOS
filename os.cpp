@@ -57,7 +57,7 @@ namespace OS{
 
         std::vector<std::string> diskFormat = {"name","path","size","date","type"};
 
-        std::vector<std::unordered_map<std::string,std::string>> disk;
+        
 
         while(std::getline(diskFile,line)){
            
@@ -71,14 +71,13 @@ namespace OS{
             }
             
             if(diskContents["type"]== "d"){
-                Directory * dir = new Directory(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],nullptr,diskContents["type"]);
+                Directory * dir = new Directory(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],diskContents["type"]);
                 this->files.push_back(dir);
             }
-            for (char c : diskContents["type"]) {
-            std::cout << "|" << static_cast<int>(c) << "|";
-            }
-            if(diskContents["type"] == diskFormat[4]){
-                std::cout << "asdas"<< std::endl; 
+            
+            else if(diskContents["type"] == "rf"){
+                
+                
                 // get char by char until catch > then break
                 std::string fileContents;
                 char c;
@@ -90,19 +89,19 @@ namespace OS{
                     }
                     fileContents += c;
                 }
-                std::cout << fileContents << std::endl;
+                RegularFile * file = new RegularFile(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],diskContents["type"],fileContents);
                
         }
+        /*else if(diskContents["type"] == "lf"){
+            File * file = new linkedFile(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],nullptr,diskContents["type"]);
+            this->files.push_back(file);
+        }*/
         
-        break;
-       
-       
-       
-
-    }
-     diskFile.close();
+        }
+        diskFile.close();
         std::cout << "Disk loaded" << std::endl;
+    }
+     
 }
 
 
-}
