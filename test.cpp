@@ -1,62 +1,13 @@
-#ifndef _GTUSet_H_
-#include <vector>
+#include <iostream>
+#include <string>
 
-template <class T>
-class GTUSet{
-    public:
-        GTUSet();
-        GTUSet(const GTUSet<T >&o);
+int main() {
+    std::string userInput;
     
-        void add(T j);
-        bool isIn(T j);
-        GTUSet& operator=(const GTUSet<T>& o);
-        private:
-            std::vector<T> setelems;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, userInput);  // Use getline to capture the entire line, including spaces
 
-};
-#ifndef // end of header
+    std::cout << "You entered: " << userInput << std::endl;
 
-#include "GTUSet.h"
-
-template <class T>
-GTUSet<T>::GTUSet(){}
-
-template <class T>
-GTUSet<T>::GTUSet(const GTUSet<T>& o){
-    setelems = o.setelems;}
-
-
-template <class T>
-GTUset& GTUSet<T>::operator=(const GTUSet<T>& o){
-    setelems = o.setelems;}
-
-template <class T>
-void GTUSet<T>::add(T j){
-    for(auto i: setelems){
-        if(i == j)
-            throw std::invalid_argument("duplicated");
-    }
-        
-    setelems.push_back(j);}
-
-template <class T>
-bool GTUSet<T>::isIn(T j){
-    for(auto i: setelems){
-        if(i == j){
-            return true;}
-           
-    }
-    else return false;
+    return 0;
 }
-
-int main(){
-    GTUSet <char> S;
-    GTUSet <char> S1;
-    try {
-        S.add('a');
-        s.add(2.1);
-    }
-    catch (std::invalid_argument& e){
-        std::cout << e.what() ;}
-    std::cout <<"a: " <<S.isIn('a');
-    return 0;}

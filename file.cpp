@@ -50,11 +50,21 @@ namespace OS{
             this->type = type;
         }
         
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Directory::Directory(std::string name, std::string path, size_t size, std::string date, std::string type): File(name,path,size,date,type){
             this->files = std::vector<File *>();
         }
 
+        void Directory::searchSubFiles(const std::vector<File *> & files){
+            
+            for(auto file : files){
+                if(file->getPath().substr(0,this->getPath().size())== this->getPath()){
+                    this->files.push_back(file);
+                }
+            }
+        }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         RegularFile::RegularFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string data): File(name,path,size,date,type){
             this->data = data;
 
@@ -73,7 +83,10 @@ namespace OS{
             std::cout << this->getData()<< std::endl;
         }
 
-    
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        linkedFile::linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, std::string mainFilePath): File(name,path,size,date,type){
+            this->_mainFilePath = _mainFilePath;
+        }
         
     
       

@@ -69,6 +69,7 @@ namespace OS{
            void addFile(File * file){
                files.push_back(file);
            };
+           void searchSubFiles(const std::vector<File *> & files);
 
     };
 
@@ -90,10 +91,11 @@ namespace OS{
 
     class linkedFile : public File{
         private:
-            File * _mainFile;             
+            File * _mainFile;
+            std::string _mainFilePath;             
         public:
             linkedFile(){};
-            linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, File * mainFile);
+            linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, std::string mainFilePath);
             ~linkedFile(){};
 
             void setMainFile(File * mainFile){
