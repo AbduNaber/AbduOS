@@ -10,6 +10,27 @@
 
 namespace OS{
     
+    class os;
+    class shell;
+
+    
+    class shell {
+
+        public:
+            shell(){};
+            ~shell(){};
+            void run(OS::os & os);
+            std::vector < std::string > parseCommand(const std::string& command) const ;
+            bool isValidCommand(const std::vector < std::string > commands,const std::vector<File *> files) const ;
+            void callOS(const std::vector < std::string > commands, OS::os & os)const ;
+            static File * findFile(const std::string& fileName, const std::vector<File*>& files) ;
+            friend class os;
+            static File * currentFile ;
+            static std::string currentPath ;
+        private:
+            
+    };
+
     class os{
         
         public:
@@ -18,7 +39,7 @@ namespace OS{
                // saveDisk();
             };
             
-            void ls(std::string parameter);
+            void ls(std::string parameter,File * cf);
             void mkdir(std::string name);
             void rm(std::string name);
             void cp(std::string sourceFilePath, std::string targetFilePath);
@@ -31,34 +52,13 @@ namespace OS{
 
         //private: for debug
             std::vector<File *> files;
-            
-            
-    };
-
-    class shell {
-
-        public:
-            shell(){};
-            ~shell(){};
-            void run(OS::os & os);
-            std::vector < std::string > parseCommand(const std::string& command) const ;
-            bool isValidCommand(const std::vector < std::string > commands,const std::vector<File *> files) const ;
-            void callOS(const std::vector < std::string > commands, OS::os & os)const ;
-            File * findFile(const std::string& fileName, const std::vector<File*>& files) const ;
-
         private:
-            
-            std::map <std::string, std::string> commandParameters = {
-                {"ls","[-R]"},
-                {"mkdir","<name>"},
-                {"rm","<name>"},
-                {"cp","<sourceFilePath> <targetFilePath>"},
-                {"link","<name> <path>"},
-                {"cd","<path>"},
-                {"cat","<name>"}
-            };
 
+
+            
+            
     };
+
 }
 
 #endif // OS_H

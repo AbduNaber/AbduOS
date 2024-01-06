@@ -70,6 +70,7 @@ namespace OS{
                files.push_back(file);
            };
            void searchSubFiles(const std::vector<File *> & files);
+           const std::vector < File *>  getFiles(){ return files ;}
 
     };
 
