@@ -82,13 +82,13 @@ namespace OS{
             else if(diskContents["type"] == "rf"){
                 
                 
-                std::string fileContents = getContents(&diskFile);
+                std::string fileContents = getContents(&diskFile,static_cast<size_t>(std::stoi(diskContents["size"])));
             
                 RegularFile * rfile = new RegularFile(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],diskContents["type"],fileContents);
                 this->files.push_back(rfile);
         }
         else if(diskContents["type"] == "lf"){
-            std::string fileContents = getContents(&diskFile);
+            std::string fileContents = getContents(&diskFile,static_cast<size_t>(std::stoi(diskContents["size"])));
             
             File * lfile = new linkedFile(diskContents["name"],diskContents["path"],static_cast<size_t>(std::stoi(diskContents["size"])),diskContents["date"],diskContents["type"],fileContents);
             linkedFile * lf = dynamic_cast<linkedFile *>(lfile);
@@ -152,10 +152,20 @@ namespace OS{
         diskFile.close();
         std::cout << "Disk saved" << std::endl;
     }
-    std::string os::getContents( std::ifstream * diskFile) const {
+    std::string os::getContents( std::ifstream * diskFile,size_t size) const {
 
         std::string fileContents;
-
+        char c;
+        diskFile->get(c);
+        if (c != '<')
+            throw std::runtime_error("File format error");
+        // using size_t read file content
+        for(size_t i = 0; i < size; i++){
+            diskFile->get(c);
+            fileContents += c;
+        }
+        
+        /*
         char c;
         diskFile->get(c);
         if (c != '<')
@@ -169,7 +179,7 @@ namespace OS{
             }
             fileContents += c;
         }
-        diskFile->get(c);// get rid of newline
+        diskFile->get(c);// get rid of newline*/
         return fileContents;
     }
 

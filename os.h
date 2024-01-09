@@ -51,7 +51,7 @@ namespace OS{
             std::string getdate();
             void shutdown();
 
-            std::string getContents(std::ifstream *diskFile) const ;
+            std::string getContents(std::ifstream *diskFile,size_t size) const ;
             static void createDisk();
             std::string getNameFromPath(std::string path)const ;
 
