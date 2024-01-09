@@ -7,6 +7,7 @@
 #include <regex>
 #include <iomanip>
 
+
 namespace OS{
 
     // os::os(){
@@ -42,10 +43,10 @@ namespace OS{
 
     void os::loadDisk(){
 
-        std::string diskName = "disk1";
+        std::string diskName ;
         std::cout << "Enter disk name: ";
 
-        //std::cin >> diskName;
+        std::cin >> diskName;
         //if it exists say it already exists
         std::ifstream diskFile(diskName);
 
@@ -215,7 +216,7 @@ namespace OS{
  
     void os::mkdir(std::string name){
         std::string path = shell::relativeToAbsolutePath(name);
-        Directory * dir = new Directory(name,path,0,"", "d");
+        Directory * dir = new Directory(name,path,0,getdate(), "d");
         for(auto f : files){
             if(f->getPath() == dir->getPath()){
                 delete dir;
@@ -430,23 +431,30 @@ namespace OS{
     }
     }
 
+    void os::shutdown(){
+        std::cout << "Shutting down..." << std::endl;
+        saveDisk();
+        exit(0);
+    }
+    
+    std::string os::getdate(){
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+        std::string date = std::to_string(ltm->tm_mday) + "." + std::to_string(1 + ltm->tm_mon) + "." + std::to_string(1900 + ltm->tm_year) + " " + std::to_string(ltm->tm_hour) + ":" + std::to_string(ltm->tm_min);
+        std::cout << date << std::endl;
+        return date;
+    }
     ////////////////////////////////////////////
     void shell::run(OS::os & os){
         
         std::string command;
-        // clear buffer from error and characters
-
-
-        while(true){
-        std::cin.clear();
-        std::cin.ignore(10000,'\n');    
-        
         std::cout << "abdu@abduPC:" ;    
         std::cout << shell::currentPath << "$ ";
 
         std::getline(std::cin,command);
-        if(command == "\n" || command == "\r" || command == "\r\n" || command == "")
-            continue;
+       if (command.empty())
+            return;
+
         
         std::vector < std::string >  commands = parseCommand(command);
         if(isValidCommand(commands,os.getFiles())){
@@ -454,7 +462,7 @@ namespace OS{
             os.saveDisk();
         }
         
-    }
+    
     }
     
     std::vector < std::string > shell::parseCommand(const std::string& command) const {
@@ -540,7 +548,9 @@ namespace OS{
                     }
                     throw std::invalid_argument("file does not exists.");
                 }
-
+                else if (commands[0]== "shutdown"){
+                    return true;
+                }
                 throw std::invalid_argument("Invalid command");
         
 
@@ -587,6 +597,10 @@ namespace OS{
      else if(commands[0] == "cp"){
         os.cp(commands[1],commands[2]);
     }    
+    else if(commands[0] == "shutdown"){
+        os.shutdown();
+    }
+    
 }
 
 std::string shell::relativeToAbsolutePath(const std::string& path){

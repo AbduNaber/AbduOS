@@ -73,6 +73,40 @@ namespace OS{
            const std::vector < File *>  getFiles(){ return files ;}
            void deleteFile(File * file);
 
+
+           class Iterator {
+                private:
+                    const Directory& directory;
+                    size_t position;
+
+                public:
+                    Iterator(const Directory& directory, size_t position) : directory(directory), position(position) {}
+
+                    // Overloading the * operator to get the current element
+                    File* operator*() const {
+                        return directory.files[position];
+                    }
+
+                    // Overloading the ++ operator to move to the next element
+                    Iterator& operator++() {
+                        ++position;
+                        return *this;
+                    }
+
+                    // Overloading the != operator to check for inequality
+                    bool operator!=(const Iterator& other) const {
+                        return position != other.position;
+                    }
+            };
+
+            Iterator begin() const {
+                return Iterator(*this, 0);
+            }
+
+            Iterator end() const {
+                return Iterator(*this, files.size());
+            }
+
     };
 
     class RegularFile : public File{
@@ -88,6 +122,39 @@ namespace OS{
             std::string getData();
             void rm();
             void cat();
+
+            class Iterator {
+               
+                public:
+                    Iterator(const RegularFile& file, size_t position) : file(file), position(position) {}
+
+                    // Overloading the * operator to get the current element
+                    char operator*() const {
+                        return file.data[position];
+                    }
+
+                    // Overloading the ++ operator to move to the next element
+                    Iterator& operator++() {
+                        ++position;
+                        return *this;
+                    }
+
+                    // Overloading the != operator to check for inequality
+                    bool operator!=(const Iterator& other) const {
+                        return position != other.position;
+                    }
+                private:
+                    const RegularFile& file;
+                    size_t position;
+                };
+
+            Iterator begin() const {
+                return Iterator(*this, 0);
+            }
+
+            Iterator end() const {
+                return Iterator(*this, data.size());
+            }
 
     };
 
@@ -134,10 +201,9 @@ namespace OS{
                 _mainFile->cat();
             };
 
-    };
-
             
     };
+};
 
 
 

@@ -1,15 +1,15 @@
 name,path,size,date,type
-root,/,0,00.00.0000 00:00,d
-a,/a,0,,d
-a,/a/a,0,,d
-temp,/temp,0,00.00.0000 00:00,d
-bin,/bin,0,00.00.0000 00:00,d
-t,/bin/t,0,,d
-home,/home,0,00.00.0000 00:00,d
-test.txt,/home/test.txt,123,00.00.0000 00:00,rf
+root,/,0,1.10.2014 12:32,d
+a,/a,0,1.10.2014 12:32,d
+a,/a/a,0,1.10.2014 12:32,d
+temp,/temp,0,1.10.2014 12:33,d
+bin,/bin,0,1.10.2014 12:32,d
+t,/bin/t,0,1.10.2014 12:32,d
+home,/home,0,1.10.2014 12:32,d
+test.txt,/home/test.txt,123,1.10.2014 12:32,rf
 <aaaaaaaaaaaaaaaaaaaaaaaa aaaaaaa qweqwe aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa adsadqwewe                                    >
-test1.txt,/bin/test1.txt,63,00.00.0000 00:00,rf
+test1.txt,/bin/test1.txt,63,1.10.2014 12:32,rf
 <qweoıqwoewqueqwıoeuqwıoueqwoıuewıoqueqwıoueqwoıeuqwıoeu>
-test2.txt,/temp/test2.txt,63,00.00.0000 00:00,rf
+test2.txt,/temp/test2.txt,63,1.10.2014 12:32,rf
 <test test
 test test>

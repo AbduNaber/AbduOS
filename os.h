@@ -48,6 +48,9 @@ namespace OS{
             void link(std::string name, std::string path);
             void cat(std::string name);
             void cd(std::string path);
+            std::string getdate();
+            void shutdown();
+
             std::string getContents(std::ifstream *diskFile) const ;
             static void createDisk();
             std::string getNameFromPath(std::string path)const ;
