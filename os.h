@@ -24,6 +24,7 @@ namespace OS{
             bool isValidCommand(const std::vector < std::string > commands,const std::vector<File *> files) const ;
             void callOS(const std::vector < std::string > commands, OS::os & os)const ;
             static File * findFile(const std::string& fileName, const std::vector<File*>& files) ;
+            static std::string relativeToAbsolutePath(const std::string& path);
             friend class os;
             static File * currentFile ;
             static std::string currentPath ;
@@ -38,25 +39,26 @@ namespace OS{
             ~os(){
                // saveDisk();
             };
-            
+            void setdiskName(std::string name) { diskName = name; };
+            std::vector <File *> getFiles() const { return files; };
             void ls(std::string parameter,File * cf);
             void mkdir(std::string name);
             void rm(std::string name);
             void cp(std::string sourceFilePath, std::string targetFilePath);
             void link(std::string name, std::string path);
+            void cat(std::string name);
             void cd(std::string path);
-            std::string getContents(std::ifstream *diskFile);
+            std::string getContents(std::ifstream *diskFile) const ;
             static void createDisk();
+            std::string getNameFromPath(std::string path)const ;
+
+
             void loadDisk();
             void saveDisk();
-
-        //private: for debug
-            std::vector<File *> files;
         private:
-
-
-            
-            
+            std::string diskName = "disk1";
+            std::vector<File *> files;
+                       
     };
 
 }

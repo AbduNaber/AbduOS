@@ -1,9 +1,15 @@
 name,path,size,date,type
 root,/,0,00.00.0000 00:00,d
+a,/a,0,,d
+a,/a/a,0,,d
 temp,/temp,0,00.00.0000 00:00,d
 bin,/bin,0,00.00.0000 00:00,d
+t,/bin/t,0,,d
 home,/home,0,00.00.0000 00:00,d
-test.txt,/home/test.txt,100,00.00.0000 00:00,rf
+test.txt,/home/test.txt,123,00.00.0000 00:00,rf
 <aaaaaaaaaaaaaaaaaaaaaaaa aaaaaaa qweqwe aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa adsadqwewe                                    >
-test1.txt,/bin/test1.txt,20,00.00.0000 00:00,rf
+test1.txt,/bin/test1.txt,63,00.00.0000 00:00,rf
 <qweoıqwoewqueqwıoeuqwıoueqwoıuewıoqueqwıoueqwoıeuqwıoeu>
+test2.txt,/temp/test2.txt,63,00.00.0000 00:00,rf
+<test test
+test test>

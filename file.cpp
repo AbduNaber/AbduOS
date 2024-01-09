@@ -3,7 +3,6 @@
 #include <fstream>
 #include "file.h"
 
-
 namespace OS{
         
         File::File(std::string name, std::string path, size_t size, std::string date, std::string type): name(name), path(path), size(size), date(date), type(type)
@@ -64,6 +63,18 @@ namespace OS{
             }
         }
 
+        void Directory::deleteFile(File * file){
+
+            for(int i = 0; i < this->files.size(); i++){
+                if(this->files[i]->getPath() == file->getPath()){
+                    this->files.erase(this->files.begin()+i);
+                    return;
+                }
+
+            }
+            
+
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         RegularFile::RegularFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string data): File(name,path,size,date,type){
             this->data = data;
@@ -84,15 +95,8 @@ namespace OS{
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        linkedFile::linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, std::string mainFilePath): File(name,path,size,date,type){
-            this->_mainFilePath = _mainFilePath;
+        linkedFile::linkedFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string mainFilePath): File(name,path,size,date,type){
+            this->_mainFilePath = mainFilePath;
+            
         }
-        
-    
-      
-      
-        
-    
-
-
 }

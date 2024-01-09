@@ -71,6 +71,7 @@ namespace OS{
            };
            void searchSubFiles(const std::vector<File *> & files);
            const std::vector < File *>  getFiles(){ return files ;}
+           void deleteFile(File * file);
 
     };
 
@@ -92,17 +93,33 @@ namespace OS{
 
     class linkedFile : public File{
         private:
-            File * _mainFile;
-            std::string _mainFilePath;             
+            File * _mainFile = nullptr;
+            std::string _mainFilePath ;             
         public:
             linkedFile(){};
-            linkedFile(std::string name, std::string path, size_t size, std::string date, char * data, std::string type, std::string mainFilePath);
+            linkedFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string mainFilePath);
             ~linkedFile(){};
 
             void setMainFile(File * mainFile){
                 _mainFile = mainFile;
             };
-
+            File * getMainFile(){
+                return _mainFile;
+            };
+            File * getMainFile() const{
+                return _mainFile;
+            };
+            File * findMainFile(const std::vector<File *> & files){
+                for(auto file : files){
+                    if(file->getPath() == _mainFilePath){
+                        return file;
+                    }
+                }
+                throw std::invalid_argument("Main file not found!");
+            };
+            std::string getMainFilePath(){
+                return _mainFilePath;
+            };
 
             void setData(std::string data){
                 _mainFile->setData(data);
