@@ -48,19 +48,22 @@ namespace OS{
             void link(std::string name, std::string path);
             void cat(std::string name);
             void cd(std::string path);
+            void rmdir(std::string name);
             std::string getdate();
             void shutdown();
 
             std::string getContents(std::ifstream *diskFile,size_t size) const ;
             static void createDisk();
             std::string getNameFromPath(std::string path)const ;
-
+            size_t getDiskSize()const ;
+            void setDiskSize();
 
             void loadDisk();
             void saveDisk();
         private:
             std::string diskName = "disk1";
             std::vector<File *> files;
+            size_t diskSize = 0;
                        
     };
 

@@ -7,7 +7,6 @@
 #include <regex>
 #include <iomanip>
 
-
 namespace OS{
 
     // os::os(){
@@ -95,9 +94,8 @@ namespace OS{
             lf->setMainFile(lf->findMainFile(this->files));
             this->files.push_back(lfile);
 
-            std::cout << lfile->getPath() << std::endl;
         }
-        
+        setDiskSize();
         }
 
         int i,j;      
@@ -150,8 +148,9 @@ namespace OS{
 
         }
         diskFile.close();
-        std::cout << "Disk saved" << std::endl;
+        
     }
+    
     std::string os::getContents( std::ifstream * diskFile,size_t size) const {
 
         std::string fileContents;
@@ -215,6 +214,7 @@ namespace OS{
                     std::cout<< "   " << f->getSize()<<"bytes";
                   }
                   else if(f->getType() == "lf") {
+                    std::cout<< "   " << f->getSize()<<"bytes";
                     std::cout<< " " << " -> " <<dynamic_cast<linkedFile *>(f)->getMainFilePath();
                   }
                 std::cout << std::endl;
@@ -271,11 +271,28 @@ namespace OS{
             if(shell::findFile(path,files) == nullptr){
                 throw std::invalid_argument("Directory does not exist");
             }
-            if(dynamic_cast<Directory *>(shell::findFile(path,files)) == nullptr){
-                throw std::invalid_argument("This is not a directory");
+            if(dynamic_cast<Directory *>(shell::findFile(path,files)) != nullptr){
+                 shell::currentPath = path;
+                shell::currentFile = shell::findFile(path,files);
+                
             }
-            shell::currentPath = path;
-            shell::currentFile = shell::findFile(path,files);
+            else if (dynamic_cast<RegularFile *>(shell::findFile(path,files)) != nullptr){ 
+                throw std::invalid_argument("cd: " + getNameFromPath(path) + ": Not a directory");
+            }
+            else if(dynamic_cast<linkedFile *>(shell::findFile(path,files)) != nullptr){
+                if(shell::findFile((dynamic_cast<linkedFile *>(shell::findFile(path,files)))->getMainFilePath(),files)->getType() == "d"){
+                    shell::currentPath = path;
+                    shell::currentFile = shell::findFile((dynamic_cast<linkedFile *>(shell::findFile(path,files)))->getMainFilePath(),files);
+                }
+                else{
+                    throw std::invalid_argument("cd: " + getNameFromPath(path) + ": Not a directory");
+                }
+                
+            }
+            else{
+                throw std::invalid_argument("cd: " + getNameFromPath(path) + ": No such file or directory");
+            }
+           
         }
     }
     
@@ -321,13 +338,13 @@ namespace OS{
         }
 
 
-        linkedFile * lfile = new linkedFile(getNameFromPath(destpath),destpath,0,"00.00.0000 00:00","lf",sourcepath);
+        linkedFile * lfile = new linkedFile(getNameFromPath(destpath),destpath,sourcepath.size(),getdate(),"lf",sourcepath);
 
 
 
 
         if(std::count(destpath.begin(), destpath.end(), '/') != 1){
-            std::cout << "asdad "<<std::endl;
+            
              dynamic_cast<Directory *>(shell::findFile(destpath.substr(0,destpath.find_last_of('/')),files))->addFile(lfile);
         }
            
@@ -398,7 +415,7 @@ namespace OS{
                 // if it is a regular file copy it
                 else if(dynamic_cast<RegularFile *>(sourceFile) != nullptr){
                     std::string data = dynamic_cast<RegularFile *>(sourceFile)->getData();
-                    File * rf = new RegularFile(getNameFromPath(targetFilePath),shell::relativeToAbsolutePath(targetFilePath),data.size(),"00.00.0000 00:00","rf",data);
+                    File * rf = new RegularFile(getNameFromPath(targetFilePath),shell::relativeToAbsolutePath(targetFilePath),data.size(),getdate(),"rf",data);
                     // cp relative path to absoulte in root burada kaldın.
                     for(int i=0;i<files.size();i++){
                         if(files[i]->getPath() == shell::relativeToAbsolutePath(targetFilePath.substr(0,targetFilePath.find_last_of('/')))){
@@ -425,7 +442,7 @@ namespace OS{
                 sourceF.get(c);
                 data += c;
             }
-            File * rf = new RegularFile(getNameFromPath(targetFilePath),shell::relativeToAbsolutePath(targetFilePath),data.size(),"00.00.0000 00:00","rf",data);
+            File * rf = new RegularFile(getNameFromPath(targetFilePath),shell::relativeToAbsolutePath(targetFilePath),data.size(),getdate(),"rf",data);
             for(int i=0;i<files.size();i++){
                         if(files[i]->getPath() == shell::relativeToAbsolutePath(targetFilePath.substr(0,targetFilePath.find_last_of('/')))){
                             dynamic_cast<Directory *>(files[i])->addFile(rf);
@@ -441,6 +458,42 @@ namespace OS{
     }
     }
 
+    void os::rmdir(std::string name){
+        std::string path = shell::relativeToAbsolutePath(name);
+        if(shell::findFile(path,files) == nullptr){
+            throw std::invalid_argument("Directory does not exist");
+        }
+        if(dynamic_cast<Directory *>(shell::findFile(path,files)) == nullptr){
+            throw std::invalid_argument("This is not a directory");
+        }
+        if(dynamic_cast<Directory *>(shell::findFile(path,files))->getFiles().size() != 0){
+            throw std::invalid_argument("Directory is not empty");
+        }
+        
+        
+        if(path.find_last_of('/')  == 0){
+            
+            (dynamic_cast<Directory *>(shell::findFile("/",files)))->deleteFile(shell::findFile(path,files));
+        }
+        else{
+            std::cout << "Directory deleted" << std::endl;
+            if(shell::findFile(path.substr(0,path.find_last_of('/')),files) == nullptr){
+                throw std::invalid_argument("Directory does not exist");
+            
+            }
+           
+            (dynamic_cast<Directory *>(shell::findFile(path.substr(0,path.find_last_of('/')),files)))->deleteFile(shell::findFile(path,files));
+        }
+        for(int i=0;i<files.size();i++){
+            if(files[i]->getPath() == path){
+                files.erase(files.begin()+i);
+                break;
+            }
+        }
+        
+
+    }
+    
     void os::shutdown(){
         std::cout << "Shutting down..." << std::endl;
         saveDisk();
@@ -454,6 +507,26 @@ namespace OS{
         std::cout << date << std::endl;
         return date;
     }
+
+    size_t os::getDiskSize()const {
+        return DISK_SIZE;
+    }
+    
+    void os::setDiskSize(){
+
+        for(auto f : files){
+            if(dynamic_cast<Directory *> (f) != nullptr){
+                diskSize += 4096;
+            }
+            else if(dynamic_cast<RegularFile *> (f) != nullptr){
+                diskSize += f->getSize();
+            }
+            else if(dynamic_cast<linkedFile *> (f) != nullptr){
+                //
+            }
+        } 
+    }
+
     ////////////////////////////////////////////
     void shell::run(OS::os & os){
         
@@ -482,7 +555,7 @@ namespace OS{
 
         // split command into tokens
         while(std::getline(ss,token,' ')){
-            std::cout << token << std::endl;
+           
             tokens.push_back(token);
         }
 
@@ -538,9 +611,13 @@ namespace OS{
                         
                 }
                 else if (commands[0]== "cp"){
+                    if(commands.size() != 3)
+                        throw std::invalid_argument("invalid parameter. example usage : cp sourceFilePath targetFilePath");
                     return true;
                 }
                 else if (commands[0]== "link"){
+                    if(commands.size() != 3)
+                        throw std::invalid_argument("invalid parameter. example usage : link sourceFilePath targetFilePath");
                    return true;
                 }
                 else if (commands[0]== "cd"){
@@ -551,6 +628,14 @@ namespace OS{
                 }
 
                 else if (commands[0]== "cat"){
+                    if(commands.size() == 2){
+                        if(findFile(shell::relativeToAbsolutePath(commands[1]),files) != nullptr){
+                            return true;
+                        }
+                    }
+                    throw std::invalid_argument("file does not exists.");
+                }
+                else if(commands[0] == "rmdir"){
                     if(commands.size() == 2){
                         if(findFile(shell::relativeToAbsolutePath(commands[1]),files) != nullptr){
                             return true;
@@ -607,6 +692,9 @@ namespace OS{
      else if(commands[0] == "cp"){
         os.cp(commands[1],commands[2]);
     }    
+    else if (commands[0]== "rmdir"){
+        os.rmdir(commands[1]);
+    }
     else if(commands[0] == "shutdown"){
         os.shutdown();
     }

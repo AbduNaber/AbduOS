@@ -63,10 +63,10 @@ namespace OS{
             }
         }
 
-        void Directory::deleteFile(File * file){
+        void Directory::deleteFile(File * file1){
 
             for(int i = 0; i < this->files.size(); i++){
-                if(this->files[i]->getPath() == file->getPath()){
+                if(this->files[i]->getPath() == file1->getPath()){
                     this->files.erase(this->files.begin()+i);
                     return;
                 }

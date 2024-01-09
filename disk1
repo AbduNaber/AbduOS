@@ -1,7 +1,6 @@
 name,path,size,date,type
 root,/,0,1.10.2014 12:32,d
 a,/a,0,1.10.2014 12:32,d
-a,/a/a,0,1.10.2014 12:32,d
 temp,/temp,0,1.10.2014 12:33,d
 bin,/bin,0,1.10.2014 12:32,d
 t,/bin/t,0,1.10.2014 12:32,d
@@ -13,3 +12,5 @@ test1.txt,/bin/test1.txt,63,1.10.2014 12:32,rf
 test2.txt,/temp/test2.txt,19,1.10.2014 12:32,rf
 <test test
 test test>
+linkedhome,/temp/linkedhome,5,9.1.2024 19:55,lf
+</temp>

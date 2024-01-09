@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 #include <stdexcept>
-
+#include <iostream>
 namespace OS{
 
 
@@ -75,9 +75,7 @@ namespace OS{
 
 
            class Iterator {
-                private:
-                    const Directory& directory;
-                    size_t position;
+                
 
                 public:
                     Iterator(const Directory& directory, size_t position) : directory(directory), position(position) {}
@@ -97,6 +95,9 @@ namespace OS{
                     bool operator!=(const Iterator& other) const {
                         return position != other.position;
                     }
+                private:
+                    const Directory& directory;
+                    size_t position;
             };
 
             Iterator begin() const {
@@ -126,26 +127,26 @@ namespace OS{
             class Iterator {
                
                 public:
-                    Iterator(const RegularFile& file, size_t position) : file(file), position(position) {}
+                    Iterator(const RegularFile& file, size_t position) : file(file), _position(position) {}
 
                     // Overloading the * operator to get the current element
                     char operator*() const {
-                        return file.data[position];
+                        return file.data[_position];
                     }
 
                     // Overloading the ++ operator to move to the next element
                     Iterator& operator++() {
-                        ++position;
+                        ++_position;
                         return *this;
                     }
 
                     // Overloading the != operator to check for inequality
                     bool operator!=(const Iterator& other) const {
-                        return position != other.position;
+                        return _position != other._position;
                     }
                 private:
                     const RegularFile& file;
-                    size_t position;
+                    size_t _position;
                 };
 
             Iterator begin() const {
@@ -182,6 +183,7 @@ namespace OS{
                         return file;
                     }
                 }
+                std::cout << this->getMainFilePath()<< std::endl;
                 throw std::invalid_argument("Main file not found!");
             };
             std::string getMainFilePath(){
@@ -198,10 +200,13 @@ namespace OS{
             };
 
             void cat(){
-                _mainFile->cat();
+                if(_mainFile->getType() == "rf"){
+                    _mainFile->cat();
+                }
+                else{
+                    throw std::invalid_argument("This is not a regular file!");
+                }
             };
-
-            
     };
 };
 
