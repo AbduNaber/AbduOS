@@ -2,12 +2,14 @@
 #include <string>
 #include <fstream>
 #include "file.h"
-
+/**
+ * File.cpp
+ * implementation of the File class
+*/
 namespace OS{
         
         File::File(std::string name, std::string path, size_t size, std::string date, std::string type): name(name), path(path), size(size), date(date), type(type)
         {}
-
 
         std::string File::getName(){
             return this->name;
@@ -49,7 +51,7 @@ namespace OS{
             this->type = type;
         }
         
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////DIRECTORY CLASS//////////////////////////////////////////////////
         Directory::Directory(std::string name, std::string path, size_t size, std::string date, std::string type): File(name,path,size,date,type){
             this->files = std::vector<File *>();
         }
@@ -75,7 +77,7 @@ namespace OS{
             
 
         }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////REGULAR FILE CLASS////////////////////////////////////////////////////////////
         RegularFile::RegularFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string data): File(name,path,size,date,type){
             this->data = data;
 
@@ -84,7 +86,12 @@ namespace OS{
             this->data = data;
         }
         std::string RegularFile::getData(){
-            return this->data;
+            std::string d;
+            for(auto c: *this){
+                d += c;
+
+            }
+            return d;
         }
         void RegularFile::rm(){
             std::cout << "rm called on regular file" << std::endl;
@@ -94,7 +101,7 @@ namespace OS{
             std::cout << this->getData()<< std::endl;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////LINKED FILE CLASS/////////////////////////////////////////////////////////
         linkedFile::linkedFile(std::string name, std::string path, size_t size, std::string date, std::string type, std::string mainFilePath): File(name,path,size,date,type){
             this->_mainFilePath = mainFilePath;
             

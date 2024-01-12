@@ -14,3 +14,12 @@ test2.txt,/temp/test2.txt,19,1.10.2014 12:32,rf
 test test>
 linkedhome,/temp/linkedhome,5,9.1.2024 19:55,lf
 </temp>
+test2.txt,/,19,9.1.2024 23:12,rf
+<test test
+test test>
+dockerlist,/temp,159,9.1.2024 23:13,rf
+<DOCKER COMMAND LİST
+docker run --privileged -it a // Docker privileged mode grants a Docker container root capabilities to all devices on the host system. 
+
+
+>

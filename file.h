@@ -7,8 +7,6 @@
 #include <stdexcept>
 #include <iostream>
 namespace OS{
-
-
     class File{
         private:
             std::string name;
@@ -70,6 +68,7 @@ namespace OS{
                files.push_back(file);
            };
            void searchSubFiles(const std::vector<File *> & files);
+           
            const std::vector < File *>  getFiles(){ return files ;}
            void deleteFile(File * file);
 
